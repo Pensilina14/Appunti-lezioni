@@ -1,2 +1,2 @@
-# Visione-artificiale
-Appunti di visione artificiale della crew
+# Appunti lezioni
+Materiale didattico di : Visione Artificiale, Crittografia e Programmazione di sistemi mobile.
