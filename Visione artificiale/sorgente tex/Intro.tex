@@ -1,6 +1,66 @@
 \chapter{Intro}
 
-\section{Questo è un modo per racchiudere codice fra parentesi}
+Idea = cercare di dotare le macchine della vista, si cerca di insegnare ai computer come interpretare le informazioni presenti in immagini e video. 
+\section{Che cosa vede un computer?}
+Un pc vede una matrice di pixel ed ogni pixel è rappresentato da un numero. Questo è il punto di partenza che ci permetterà di capire che cosa c'è nell'immagine.
+\section{Perchè è difficile?}
+Punti di vista diversi, occlusione (un oggetto ne copre un altro), distorsione, movimento (a volte può tornare utile), variazioni-intra-classe, sfondo complesso (sfondo non omogeneo, pieno di informazioni che non ci interessano).
+\section{Perchè è importante?}
+Ha molteplici applicazioni, quali
+\begin{itemize}
+	\item Sicurezza stradale;
+	\item Salute;
+	\item Prevenzione del crimine;
+	\item Protezione civile;
+	\item Divertimento;
+	\item Domotica.
+\end{itemize}
+
+\newpage
+
+\section{Possibili applicazioni - Panoramica generale}
+\begin{itemize}
+	\item Misurazione, conteggio, qualità : Hanno in comune il fatto di volere misurare la qualità di un qualche oggetto;
+	\begin{itemize}
+		\item Misurazione precisa non a contatto : In campo industriale pensiamo ad una catena di montaggio in cui passano prodotti che hanno bisogno di un controllo qualità, che viene svolto da una macchina che sfrutta tecniche di visione artificiale (Controllo delle quantità di liquido in una bottiglietta).
+		\item Conteggio di veicoli e persone in una piazza, in generale stime dimensionali;
+	\end{itemize}
+	\item Elaborazione immagini avanzata
+	\begin{itemize}
+		\item Miglioramento immagini;
+		\item Immagini mediche;
+		\item Segmentazione di aree agricoli, utili per individuare le immagini aeree e satellitari.
+	\end{itemize}
+	\item Riconoscimento
+	\begin{itemize}
+		\item Classificazione/individuazione di oggetti : Tag inseriti all'interno dell'immagine, Ricerca per somiglianza di immagini, riconoscere segnali stradali;
+		\item Riconoscimento persone : punta non solo a classificare, bensì riconoscere univocamente una persona.
+	\end{itemize}
+	\item Movimento
+	\begin{itemize}
+		\item Video sorveglianza : individuare un ladro, ritrovare uno zaino perso;
+		\item Navigazione e guida autonoma.
+	\end{itemize}
+\end{itemize}
+
+\section{Strumenti di lavoro}
+
+\subsection{Python}
+Standard di fatto per lo sviluppo di software scientifico, tra le altre cose anche di visione artificiale. Linguaggio di alto livello, che ha un certo livello di astrazione, in generale con poche linee, se utilizzate in modo corretto possiamo esprimere concetti piuttosto complessi.
+
+\subsection{OpenCV}
+OpenCV è la libreria standard per quanto riguarda la visione artificiale, è sviluppata in C++, però è utilizzata anche da altri linguaggi (quali python).
+
+\subsection{NumPy}
+La Lazzaro ce lo ha già spiegato.
+
+\subsection{OpenCV-Python}
+Una volta richiamato OpenCV da python, tutte le strutture dati (vettori, punti nelle immagini, ecc.) sono array numPy.
+
+\subsection{Jupyter Notebook}
+
+Ambiente web, in cui vengono scritti piccoli pezzi di codice, immagini e altro al fine di creare dei documenti interattivi.
+
 \begin{lstlisting}
 	//Hello.java
 	import javax.swing.JApplet;

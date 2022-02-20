@@ -1,13 +1,158 @@
 \chapter{Python}
 
+Python è il Leonardo Di Caprio dei linguaggi di programmazione. Ma perchè?
+
+\section{Descrizione}
+
+\begin{itemize}
+	\item Python è un linguaggio ad alto livello, general purpose, può essere utilizzato per qualunque tipo di applicazione;
+	\item il codice deve essere facile da leggere, è una prerogativa;
+	\item occorrono poche linee di codice per sviluppare anche concetti complessi;
+	\item supporta programmazione : oop, imperativa e funzionale;
+\end{itemize}
+
+\section{Fun fact}
+
+L'autore, Guido Van Rossum, sceglie il nome python perchè amante del gruppo comico Monty Python, attivo negli anni 70-80. 
+
+\section{Zucchero sintattico}
+
+\subsection{Indentazione}
+
 \begin{lstlisting}
-	//Hello.java
-	import javax.swing.JApplet;
-	import java.awt.Graphics;
+	//Non si puo' cambiare indentazione in un blocco
+	print("Salve Cesena")
+		print("Salve di nuovo!")
 	
-	public class Hello extends JApplet {
-		public void paintComponent(Graphics g) {
-			g.drawString("Hello, world!", 65, 95);
-		}    
-	}
+	//L'indentazione definisce i blocchi di codice
+	if 42 < 0:
+		print("ciao")
+	print("ciao ma in corsivo")
+	
+	//andata a capo
+	istruzione_molto_lunga = 2 + 5 \
+								+ 6 + 7
+
+	//Piu' istruzioni in una singola riga
+	print("a"); print("b")
 \end{lstlisting}
+
+\subsection{Variabili}
+
+\begin{lstlisting}
+	//Le variabili in python non si dichiarano, vengono create automaticamente al momento dell'inizializzazione sono case sensitive, iniziano con una lettera o underscore e i caratteri ammessi sono le Lettere, i numeri e l'underscore (codifica UNICODE)
+	
+	x = 4
+	y = "Visione artificiale"
+	print(x, y)
+	
+	//Assegnamento dello stesso valore a piu' variabili
+	
+	x = y = z = 90
+	
+	//Variabili globali e locali
+	
+	a = "cool" //Variabile globale
+	
+	def function():
+		a = "bad" //Variabile locale alla funzione 
+		
+	//Se aggiungo global la variabile globale a, definita inizialmente verra' modificata
+	def function():
+		global a = "bad"
+\end{lstlisting}
+
+\subsection{Tipi di dati}
+
+Python è tipizzato, solo che, una volta inizializzata una variabile non abbiamo un modo per specializzare un tipo, una volta assegnato un valore viene definito automaticamente (se scrivo tra "", l'oggetto diventerà una stringa). La variabile non ha tipo, è l'oggetto creato che ha un tipo. Il tipo non è legato alla variabile ma all'oggetto!!! I tipi predefiniti di python sono:
+\begin{itemize}
+	\item Testo : str
+	\item Numeri : int, float, complex
+	\item Sequenze : list, tuple, range
+	\item Dizionari : dict
+	\item Insiemi : set, frozenset
+	\item booleani : bool
+	\item binari : bytes, bytearray, memoryview
+\end{itemize}
+
+\newpage
+
+\begin{lstlisting}
+	x = "ciao" //stringa
+	x = 20 //int
+	x = 20.5 //float
+	x = 1j //numero complesso
+	x = ["ciao", "come", "stai"] //list
+	x = ("ciao", "come", "stai") //tuple
+	x = range(5) //range
+	x = {"nome" : "Va", "codice" : 17633} //dict
+	x = {"ciao", "amico"} //set
+	x = frozenset(x) //frozenset, ovvero un set non modificabile
+	x = True //bool
+	x = b"ABCD" //bytes
+	x = bytearray(5) //bytearray
+	x = memoryview(bytes(5)) //memoryview
+	//con type viene stampato il tipo della variabile
+	type(x)
+\end{lstlisting}
+
+\subsection{Oggetti, valori, tipi}
+
+Qualunque dato in python è un oggetto, ogni oggetto è caratterizzato da : un tipo, un'identità ed un valore.
+Inoltre:
+\begin{itemize}
+	\item il tipo determina le operazioni che l'oggetto supporta;
+	\item l'identità non cambia mai;
+	\item Il tipo determina se un oggetto è mutabile o meno;
+	\item le variabili sono riferimenti ad oggetti.
+\end{itemize}
+Python in sè per sè è lento, perchè però ha questo successo? Perchè in un programma sono poche le componenti che devono essere efficienti e sono spesso algoritmi. Gli algoritmi verranno presi da NumPy o altre librerie, che hanno la loro implementazione in C o C++, garantendo massima efficienza.
+
+\begin{lstlisting}
+	//L'assegnamento crea un oggetto in memoria di tipo Float, a cui la variabile fa riferimento
+	answer = 3.4
+	print('Type:', type(answer))
+	print('Identity', id(answer))
+	print('Value', answer)
+	
+	//L'assegnamento copia il riferimento dell'oggetto nella nuova variabile
+	spam = answer
+	print(spam.equals(answer)) //ritornera' True
+	
+	 //L'istruzione seguente NON modifica l'oggetto ma crea un nuovo oggetto contenente il risultato e ne assegna il riferimento alla variabile: si puo' osservare infatti che l'identita' dell'oggetto associato a 'answer' e' cambiata, mentre l'identita' di spam e' la stessa
+	 answer *= 2
+	 print('Identita nuovo oggetto:', id(answer))
+	 print('Identita vecchio oggetto :', id(spam))
+\end{lstlisting}
+
+\subsection{Alcuni oggetti predefiniti}
+
+Il loro tipo non fa parte dei tipi di base visti prima, hanno un valore particolare.
+
+\begin{itemize}
+	\item None : None è l'unico oggetto della classe NoneType, è simile a null ma c'è una differenza sostanziale: quando una variabile è a null significa che non ha un riferimento ad un oggetto mentre il None è un oggetto che esiste in memoria (ne esiste solo uno). Ponendo una variabile = None, la variabile punta a quell'oggetto.
+	\item Ellipsis : Sono i puntini di sospensione, è utile in NumPy
+	\item NotImplemented : Metodi numerici e di confronto possono restituire questo valore se non implementano l'operazione per determinati operandi.	
+\end{itemize}
+
+\begin{lstlisting}
+	//Sintassi per oggetto Ellipsis
+	x = ...
+	y = Ellipsis
+	print(x, y)
+	//Confronto fra stringa e numero, restituisce notImplemented
+	ret = 'testo'._eq_(42)
+\end{lstlisting}
+
+\section{Numeri}
+
+I numeri possono essere rappresentati attraverso int, float e Complex, possono essere convertiti utilizzando i relativi costruttori (es: float()).
+
+\section{Stringhe}
+
+Tutti i caratteri messi dentro ad una stringa con triplici apici vengono considerati, non succede la stessa cosa con apici doppi o singoli.
+Non esiste il tipo carattere! E' possibile accedere alle stringhe come se fossero array(liste python).
+
+\begin{listlisting}
+	\item 
+\end{listlisting}
