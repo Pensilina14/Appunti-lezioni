@@ -1,13 +1,147 @@
 \chapter{Il caso}
 
-\begin{lstlisting}
-	//Hello.java
-	import javax.swing.JApplet;
-	import java.awt.Graphics;
+La randomness è la regina della crittografia, è vista come una risorsa, costa e richiede energie per produrla : più la randomness è randomica, più i protocolli sono sicuri. 
+
+\section{Bit casuale}
+
+Un bit casuale è un qualcosa che può assumere valore 0 o 1 con probabilità $\dfrac{1}{2}$, questa definizione ci porta però a scontrarci con questa situazione:
+\begin{itemize}
+	\item sequenza 1 : 11111111
+	\item sequenza 2 : 10100100
+\end{itemize}
+Notiamo che la prima sequenza non è casuale mentre la seconda sì (per la legge dei grandi numeri la prima è molto improbabile che sia casuale, specie se estesa ad un numero di cifre alto).
+Ma secondo la prima definizione che abbiamo dato considera che $P(11111111) = P(10100100) = \dfrac{1}{2^{10}}$, il che non è in linea con il nostro ragionamento.
+
+\section{Casualità in crittografia}
+
+In crittografia casuale = "non facilmente prevedibile", un ipotetico avversario (o intruso) non deve essere in grado di prevedere ciò che noi generiamo a caso.
+
+\section{Casualità secondo Laplace}
+Laplace osserva che se tu lanci 100 volte una moneta, le combinazioni di risultati (T o M), formano sequenze regolari, facili da comprendere oppure sequenze irregolari che sono incomparabilmente più numerose (ci sono più combinazioni irregolari rispetto a quelle regolari).
+
+\section{Casualità secondo Kolmogorov}
+Kolmogorov dice che una sequenza binaria h è casuale se non ammette alcun algoritmo di generazione A la cui rappresentazione binaria sia più corta di h.
+Se noi prendessimo le cifre dopo la virgola di $\pi$ notiamo che queste sono abbastanza irregolari. Noi possiamo però creare un programma che, a seconda della complessità, mi può restituire le cifre di $\pi$ sempre più grandi (il programma però ha una lunghezza finita!). Secondo Kolmogorov quindi, la generazione di $\pi$ non è casuale, le cifre dopo la virgola è possibile determinarle in maniera assoluta da un programma di lunghezza costante. Kolmogorov introduce il concetto di complessità computazionale, se ho un algoritmo definito che genera una stringa, in maniera deterministica, non si può parlare di casualità.
+
+\subsection{Riflessioni}
+
+Supponiamo di avere una procedura Random(n) che produce una sequenza di n bit. Quando n cresce le sequenze prodotte da Random non saranno casuali avendo una lunghezza maggiore della rappresentazione binaria della procedura Random. 
+
+\paragraph{Quindi} secondo Kolmogorov non esistono generatori di
+numeri casuali!!!
+
+\section{Pseudo-casualità}
+
+Noi abbiamo bisogno di casualità, è la nostra risorsa, quindi sarà necessario considerare il concetto di \textbf{pseudo-casuale} (quasi casuale). I generatori pseudo-casuali sono algoritmi che producono sequenze di bit che supereranno i test di casualità.
+I test di casualità sono proprietà che le stringhe prodotte dai generatori devono soddisfare.
+I generatori di bit pseudo-casuali sono deterministici, significa che : se prendo un algoritmo, voglio che ogni volta che gli do lo stesso input lui mi dia lo stesso output (non può inventarsi scelte casuali). Per non essere deterministici avrebbero bisogno a loro volta di bit casuali (eh però è un loop infinito, vogliamo un generatore di bit casuali, che per funzionare ha bisogno di bit casuali... determinati con? generatore di bit casuali?). Quindi producono la stessa sequenza di bit ogni volta che li invochiamo a meno che non gli forniamo un "seme" in input. Stesso seme, stessa sequenza! Stiamo dicendo che per generare casualità al mio algoritmo devo passargli casualità, perchè per conto suo l'algoritmo non è in grado di generarla, essendo l'algoritmo un processo deterministico.
+Seme di casualità : seme perchè cresce, germoglia e diventa più grande, dando un seme di randomness all'algoritmo, la randomness crescerà. Cosa significa? : io darò un numero all'algoritmo e lui con questo numero tirerà fuori una sequenza amplificata. Piuttosto che parlare di generatori, parliamo di amplificatori di casualità, prendo un seme piccolo (es : un numero, tipo il ciclo di clock, la data, ecc.) e lo amplifico.
+
+\subsection{Definizione formale : generatore di numeri pseudo-casuali}
+
+Un generatore di numeri pseudo-casuali è un algoritmo che parte da un piccolo valore iniziale detto seme, solitamente fornito come dato di
+ingresso, e genera una sequenza arbitrariamente lunga di numeri. Questa a sua volta contiene una sottosequenza detta periodo che si ripete
+indefinitamente (andando molto avanti ad un certo punto le cifre si ripeteranno). In linea di principio un generatore è tanto migliore quanto più lungo è il periodo (è migliore se riesce ad ingannarci per più tempo possibile, fino a quando crediamo che sia random siamo dentro al periodo, una volta scavallato il periodo riusciamo a capire che l'algoritmo ha finito la sua amplificazione di randomness).
+Questi generatori possono però essere considerati amplificatori di casualità perché se innescati da un seme casuale di lunghezza m, fornito dall’utente, generano una sequenza "apparentemente" casuale di lunghezza
+n >> m. Una inerente limitazione è che il numero di sequenze diverse che possono essere così generate è al massimo pari al numero di semi possibili, cioè 2m nel caso binario, enormemente minore del numero complessivo 2n delle sequenze lunghe n.
+
+\begin{figure}[htp]
+	\includegraphics[width=0.8\linewidth]{./img/periodo.png}
+	\caption{Esempio di periodo}
+	\label{img:periodo}
+\end{figure}
+
+\section{Test statistici di casualità}
+
+Si prende una stringa, gli si applicano dei test che ci dicono se, almeno statisticamente, le parti dentro alla stringa sembrano casuali. I test di casualità sono:
+\begin{itemize}
+	\item Test di frequenza : (es : la stringa 00000 non passerà il test di frequenza, perchè gli zeri dovrebbero essere circa metà della stringa, deve essere uniformemente generata. La stringa 0000011111 ironicamente passerebbe il test, anche se sembra tutto tranne che casuale)
+	\item Poker test :  Si prendono le sottosequenze di una stringa e si osserva come sono distribuite.  Con la stringa 0000011111, abbiamo che la sottosequenza lunga 3 appare 3 volte, non passa il test, perchè ci sono sequenze che hanno una frequenza innaturale per essere random, non posso avere troppe stringhe con 3 zeri consecutivi o 3 uni consecutivi.
+	\item Test di autocorrelazione : si verifica che il numero di elementi ripetuti a distanza prefissati abbiano certe caratteristiche. Nella stringa 0000011111 ci accorgiamo che, prendendo i bit, a distanza 5, risulta sempre la coppia [0, 1], non è random.
 	
-	public class Hello extends JApplet {
-		public void paintComponent(Graphics g) {
-			g.drawString("Hello, world!", 65, 95);
-		}    
-	}
-\end{lstlisting}
+	\item Run test : Prendo la sottosequenza massimale tutta uguale e guardo ogni quanto deve comparire una stringa lunga n (nell'esempio è 5) di tutti zeri o uni. Nell'esempio questa ripetizione deve apparire ogni $2^{-stringLength}$ stringhe.
+\end{itemize}
+
+\section{Generatore lineare}
+
+Generatore che supera i 4 test appena enunciati: 
+Un generatore pseudo-casuale molto semplice che supera con successo i quattro test citati è il generatore lineare, che produce una sequenza di interi positivi $x_1, x_2, ..., x_n$ a
+partire da un seme casuale $x0$ secondo la relazione:\\
+$x_i = (a x_{i-1} + b)$ mod $m$, dove $a, b, m$ sono interi positivi. Il seme $x_0$ è un seme di casualità, un valore di innesco che permette di far funzionare l'algoritmo (deve rispettare le proprietà definite sopra).
+$a, b, m$ sono 3 valori fissati (che devono rispettare precise proprietà).
+Mod $m$ significa fare a fette un numero in parti lunghe $m$ e prendere ciò che rimane (resto della divisione per $m$), serve per rimpicciolire robe gigantesche. 
+\paragraph{Quindi} parto da un valore di innesco $x_0$ (il seme), che utilizzerò per calcolare la relazione $x_i = (a x_{i-1} + b)$ mod $m$, dati $a, b, m$ fissati, per ogni valore $i$ preso in considerazione. 
+
+\subsection{Condizione importante (non serve memorizzarla)}
+
+Affinché il generatore abbia periodo lungo m, e quindi induca una permutazione degli interi $0, 1, ..., m - 1$, i
+suoi parametri devono essere scelti in modo tale che $gcd(b, m) = 1$, $(a  1)$ sia divisibile per ogni fattore primo di $m$, e ($a - 1$) sia un multiplo di 4 se anche $m$ è un multiplo di 4 (valori consigliati sono per esempio: $a = 3141592653, b = 2718281829, m = 232$ e seme 0.\\
+Note : gcd è il massimo comun divisore.
+
+\paragraph{Conclusione}
+
+Nei generatori ci sono proprietà auspicabili per $a, b, m$, in modo che il generatore lineare amplifichi molto la randomness del seme. I generatori soddisfano i test statistici, però non vanno comunque bene in crittografia, perchè ci sono algoritmi che riescono, dato ad un pezzo di sequenza a risalire ad $a, b, m$.
+
+\section{Generatore polinomiale}
+
+Il generatore polinomiale è una generalizzazione del generatore lineare, che segue le formulazione:
+
+$x_i = (a_1 x^{t}_{i-1} + a_2 x^{t-1}_{i-1} + ... + a_t x_{i-1} + a_{t + 1})$
+
+\section{Generatore binario}
+
+Noi non vogliamo numeri interi grandi come output, vogliamo dei bit, quindi estraiamo dei bit nel modo più casuale possibile rispetto a quelli generati dal generatore. Si calcola $r = x_i / m$: se la prima cifra decimale di $r$ è dispari pongo il bit a 1, altrimenti a 0.
+
+\subsection{Difetti}
+
+I generatori lineari e polinomiali sono particolarmente efficienti (sono veloci a calcolare i bit casuali) ma non impediscono di fare previsioni sugli elementi generati, neanche quando il seme impiegato è strettamente casuale. Esistono infatti algoritmi che permettono di scoprire in tempo polinomiale i parametri del generatore partendo dall’osservazione di alcune
+sequenze prodotte, e questo ne svela completamente il funzionamento.
+
+\section{Generatori basati su funzioni one-way}
+One-way : senso unico, in una direzione è semplice procedere (il calcolo), nell'altra è difficile (invertire).
+Le funzioni one-way sono computazionalmente facili da calcolare e difficili da invertire: cioè si conosce un algoritmo polinomiale per il calcolo di $y=f(x)$, ma si conoscono solo algoritmi esponenziali per il calcolo di $x=f^{-1}(y)$. Notiamo che si opera su numeri, quindi il
+costo degli algoritmi deve essere riferito alla lunghezza
+della rappresentazione di $x$ : un algoritmo che richiede un
+numero di operazioni proporzionale al valore di $x$ sarà
+dunque esponenziale. Il costo computazionale è riferito alla lunghezza del numero (input), se io ho 13215798 la lunghezza del numero è 8 (ovvero il numero di cifre), è l'n in base al quale calcoliamo il costo. La lunghezza dei numeri è correlata al numero stesso tramite un logaritmo (e non con il valore stesso del numero, consideriamo il numero di cifre). 
+
+\section{Generatori basati su funzioni one-way}
+$f$ è la nostra funzione one-way e definiamo una sequenza applicandola ad un valore.\\
+$S = xf(x)f(f(x))f(f(f(x)))...$\\
+Se io uso questo sistema, quando conosco $f(x)$ posso ricavare $f(f(x))$, quindi i numeri sono facilmente prevedibili. Ma cosa succede se io all'esterno fornisco questi numeri in numero inverso? ovvero f(f(x)), piuttosto che f(x)? Che per ricavare f(f(x)) è necessario invertire la funziona, che abbiamo visto, nelle funzioni one-way, essere difficile. Formalmente:\\
+Se dunque si calcola la S per un certo numero di passi senza svelare il risultato, e si comunicano poi gli elementi uno dopo l’altro in ordine inverso, ciascun elemento non è prevedibile in tempo polinomiale pur conoscendo quelli comunicati prima di esso.
+
+\newpage
+
+\section{Test di prossimo bit}
+
+Test che ci dice se ciò che stiamo vedendo è abbastanza random per i nostri scopi crittografici. Dice che:\\
+Se io ho 10001101 e voglio scoprire cosa viene dopo l'ultimo 1 mi butto ad indovinare, avendo in ogni caso probabilità $\dfrac{1}{2}$ di indovinare (questo vale per un qualcuno che non ha informazioni legate alla generazione di bit). Se un qualcuno non ha $P("indovinare") \geq \dfrac{1}{2} + \delta$ ho vinto, ho passato il test, se l'algoritmo passa il test viene detto crittograficamente sicuri ed è dimostrabile che passano anche i 4 test standard definiti in precedenza. Essi
+vengono costruiti impiegando particolari predicati delle funzioni one-way, cioè proprietà che possono essere vere o false per ogni valore di x.
+
+\section{Predicati hard-core}
+Un predicato, in logica, è una funzione che si applica ad un qualcosa e restituisce vero o falso.\\
+Formalmente:\\
+Un predicato $b(x)$ è detto hard-core per una funzione one-way $f(x)$ se $b(x)$ è facile da calcolare conoscendo il valore di $x$ , ma è difficile da calcolare (o anche solo da prevedere con probabilità di successo maggiore di 1/2) conoscendo solo il valore di $f (x)$. In sostanza la proprietà hard-core, letteralmente "nucleo duro", concentra in un bit la difficoltà computazionale della $f$. 
+\paragraph{Abbiamo che} se $f$ è una funzione difficilmente invertibile è difficile, a partire da $x_1$ definire $x_0$ (la $f$ è one-way). In questo caso, il predicato hardcore mi dice : è difficile calcolare tutto $x_0$, o c'è solo un bit difficile da calcolare? $b$ deve essere una spremuta di $x_0$, di un solo bit, che comunque deve essere difficile da calcolare.
+
+\subsection{Esempio}
+
+Un esempio di funzione one-way è la $f(x) = x^2$ mod $n$ se
+$n$ non è primo. Esempio: $n = 77$ e $x = 10$, è (polinomialmente) facile calcolare il valore $y = 102$ mod $77 = 23$ ma è (esponenzialmente) difficile risalire al valore di $x = 10$ dato $y = 23$. Ora il predicato: $b(x) = "x è dispari"$ è hard-core per la funzione suddetta. Infatti il valore di $x$ permette di calcolare immediatamente $b(x)$ = 1 se x è dispari, $b(x)$ = 0 se x è pari, ma il problema di calcolare $b(x)$ conoscendo solo il valore $y = x^2$ mod $n$ è esponenzialmente difficile.
+
+\begin{figure}[htp]
+	\includegraphics[width=200pt]{./img/funzioni-one-way.png}
+	\caption{Quello che in breve, dobbiamo sapere su questo generatore}
+	\label{img:funzioni-one-way}
+\end{figure}
+
+\newpage
+
+\section{Generatore Blum, Blum, Shub}
+
+\begin{figure}[htp]
+	\includegraphics[width=0.8\linewidth]{./img/blumblumshub.png}
+	\caption{Quello che in breve, dobbiamo sapere su questo generatore}
+	\label{img:blumblumshub}
+\end{figure}

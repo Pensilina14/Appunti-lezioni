@@ -1,0 +1,105 @@
+\chapter{Android}
+
+\section{Introduzione}
+
+Android occupa l'80 per cento del mercato mobile, parliamo anche di altri device (non solo smartphone), ad esempio:
+\begin{itemize}
+	\item wearable
+	\item android tv
+	\item android per le macchine
+	\item android things (utilizzato per iot)
+\end{itemize}
+
+\section{Qual è il sistema operativo più diffuso al mondo?}
+
+Il sistema operativo più diffuso, al 2019 è Android, dopo viene Windows.
+
+\section{Storia}
+
+Android è stato fondato nel 2003 da 4 amici : Andy Rubin, Rich Miner, Nick Sears e Chris White. Nel 2005 Google lo acquisì per 50 milioni di dollari. Google non solo lo compra, pensa bene di inserire nel sistema operativo il Kernel linux, trovata straordinaria! Lo sviluppo terminò il 5 novembre 2007. Il primo smartphone con Android viene fuori nel 2008, la prima versione accreditata è stata la 1.5 e ha preso il nome di cupcake. Fun fact : i nomi delle versioni (nomi di dolci) sono in ordine alfabetico. Nelle versioni successive ha dovuto cambiare, sia per mancanza di nomi che per questioni legate alle lamentele di determinati paesi.
+
+\section{Android 10}
+
+La versione 10 di android ha introdotto il 5G, ha migliorato la privacy e la security (es: randomizzazione del MAC address $\rightarrow$ $\{$il nostro device ha un mac fisso, ma dal momento che si connette ne crea uno fasullo$\}$, protezione del tracking, protezione dei dati degli utenti). 
+
+\newpage
+
+\subsection{Maggiori novità}
+
+Grandi ottimizzazioni, ogni app gira in una sua sandbox, quindi le app sono staccate fra le altre, le comunicazioni fra app avvengono solo attraverso il sistema operativo, questo garantisce tanta sicurezza.\\
+Thermal API: Miglioramenti legati alla temperatura, questa API, limita l'utilizzo di risorse.
+
+\section{Android 11}
+
+Rilasciata l'8 settembre 2020, novità principali:
+Lato privacy ha introdotto il one-time-permission (do il permesso solo una volta) e il permission auto-reset (se non uso l'app per un tot tempo togli i permessi).
+
+\section{Android 12}
+
+C'è un completo restyling dell'interfaccia grafica, il motto è: More personal (personalizzabile), safe (privacy e sicurezza) and effortelss (poco sforzo, hanno spinto molto su questo) than ever before. Questa versione si concentra davvero tanto sull'interfaccia grafica. Curato molto anche il tema dell'accessibilità, anche se ancora ios è superiore. Android è open source... cool. 
+
+\section{Android...In dettaglio!}
+
+\begin{itemize}
+	\item open source;
+	\item sicuro.
+\end{itemize}
+
+\section{Architettura}
+
+\subsection{Kernel linux}
+
+Il fondamento della piattaforma Android è il kernel Linux, il quale comunica con l'hardware. Linux è portabile (facile da compilare nelle diverse architetture), sicuro, ha una gestione ottimale della memoria ed affidabile.
+
+\subsubsection{Sicurezza del kernel}
+
+Lato sicurezza si sfrutta interamente linux (permessi, risorse, pid, boot, ecc.). Ogni applicazione, è in una sandbox ed ha un proprio UserID.
+
+\subsection{Hardware Abstraction Layer (HAL)}
+
+Siamo al livello superiore rispetto al linux kernel e nasconde il vero device, astraendo tutto ciò che c'è a livello inferiore.
+
+\subsection{Android runtime}
+
+L'android runtime rende possibile l'utilizzo delle sandbox, ogni app viene eseguita nel proprio processo e con la propria istanza di Android Runtime (ART). Questa è la parte ampiamente migliorata in Android 10. Qui viene gestita la virtualizzazione, dunque il garbage collector, debug, ecc... siamo in java! 
+
+\subsection{Native libraries}
+
+Le librerie Native sono scritte in C/C++. Serve comunicare con questa parte nativa nel caso in cui si debbano utilizzare dei sensori, altrimenti difficilmente capita.
+
+\subsection{Java API framework}
+As a Java hypebeast, this is very cool. Questo rappresenta il cuore di android.
+
+\subsection{System Apps}
+
+Queste sono le app preinstallate, es: camera, calendario, email, ecc. Solitamente vengono sfruttate dalle altre app, attraverso la comunicazione diretta.
+
+\section{Kotlin}
+
+Kotlin è un linguaggio molto promettente, leggibile. Ha differenze sostanziali con java, occorre del tempo. Netflix ad esempio è kotlin first.
+
+\section{Componenti fondamentali android}
+
+\subsection{Activities}
+
+Tutto ciò che l'utente ha come possibilità per comunicare con la nostra App (è il suo punto di accesso con la nostra app). Quindi comprende : interfaccia, touch, ecc...
+
+\subsection{Services}
+
+I servizi sono tipo le activity, la differenza è che non sono visibili all'utente, sono tutte le robe che vanno in background (tipo spotify). Dunque \textbf{non} fornisce un'interfaccia utente.
+
+\subsubsection{Background services}
+
+Sono servizi che eseguono in background senza che l'utente ne sia direttamente a conoscenza come in esecuzione.
+
+\subsubsection{Broadcast receivers}
+
+Mandano messaggi ad altre app, in broadcast. E' un modo per scambiarsi messaggi fra le diverse app.
+
+\subsection{Content providers}
+
+Ci permette di capire dove memorizzeremo i dati, Android ha un proprio database interno.
+
+\subsection{Intent}
+
+E' tutto quello che ci permette di comunicare con altre app, è molto semplice ed intuitivo. Ci permetterà di esporre servizi anche agli altri.

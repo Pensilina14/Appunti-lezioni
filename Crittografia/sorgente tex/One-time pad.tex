@@ -26,9 +26,7 @@ In sintesi :
 \end{itemize}
 La distribuzione di probabilità della M dipende dalla sorgente, chi è la sorgente? la sorgente è colui che genera il messaggio (tira fuori i bit, che vengono organizzati in blocchi e poi spenditi sul canale).
 
-\paragraph{Nota :} Non è possibile che due messaggi uguali generino due c diverse, allo stesso modo non è possibile che due messaggi diversi abbiano uno stesso c, dal momento che in quel caso il destinatario non sarebbe in grado di ottenere con precisione il messaggio in seguito alla codifica.
-
-\\\\
+\paragraph{Nota :} Non è possibile che due messaggi uguali generino due c diverse, allo stesso modo non è possibile che due messaggi diversi abbiano uno stesso c, dal momento che in quel caso il destinatario non sarebbe in grado di ottenere con precisione il messaggio in seguito alla codifica.\\\\
 Esempio applicativo : 
 Il mittente è il signor dado, che vuole spedire un messaggio al destinatario. I messaggi che spedisce il signor dado sono $M = \{1, 2, 3, 4, 5, 6\}$. Il modello matematico dice che io spedisco $1 con p = 0.5; (2, 4, 5, 6) con p = 0.1$ (questa è la distribuzione di probabilità del nostro mittente dado). Quando dado vuole spedire $4$, prende la sua codifica e la cifra, $C(4)$, che genererà un crittogramma $c$ che poi verrà spedito sul canale. Chi guarda il canale (ad esempio l'intruso), prima che passi $c$, sa già che il messaggio 4 esce con probabilità 0.1, stessa cosa per ogni valore. Ora supponiamo di aver letto $c$, noi vogliamo che conoscendo $c$ la probabilità che il messaggio fosse 4 rimanga sempre 0.1, questo vuol dire che l'informazione rivelata dall'evento "ho letto $c$" è nulla, non serve a nulla. Un cifrario è perfetto se la probabilità iniziale rimane inalterata anche se viene visto ciò che è passato sul canale di comunicazione.
 

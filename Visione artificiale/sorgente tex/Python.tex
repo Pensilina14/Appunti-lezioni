@@ -20,44 +20,44 @@ L'autore, Guido Van Rossum, sceglie il nome python perchè amante del gruppo com
 \subsection{Indentazione}
 
 \begin{lstlisting}
-	//Non si puo' cambiare indentazione in un blocco
+	#Non si puo' cambiare indentazione in un blocco
 	print("Salve Cesena")
 		print("Salve di nuovo!")
 	
-	//L'indentazione definisce i blocchi di codice
+	#L'indentazione definisce i blocchi di codice
 	if 42 < 0:
 		print("ciao")
 	print("ciao ma in corsivo")
 	
-	//andata a capo
+	#andata a capo
 	istruzione_molto_lunga = 2 + 5 \
 								+ 6 + 7
 
-	//Piu' istruzioni in una singola riga
+	#Piu' istruzioni in una singola riga
 	print("a"); print("b")
 \end{lstlisting}
 
 \subsection{Variabili}
 
 \begin{lstlisting}
-	//Le variabili in python non si dichiarano, vengono create automaticamente al momento dell'inizializzazione sono case sensitive, iniziano con una lettera o underscore e i caratteri ammessi sono le Lettere, i numeri e l'underscore (codifica UNICODE)
+	#Le variabili in python non si dichiarano, vengono create automaticamente al momento dell'inizializzazione sono case sensitive, iniziano con una lettera o underscore e i caratteri ammessi sono le Lettere, i numeri e l'underscore (codifica UNICODE)
 	
 	x = 4
 	y = "Visione artificiale"
 	print(x, y)
 	
-	//Assegnamento dello stesso valore a piu' variabili
+	#Assegnamento dello stesso valore a piu' variabili
 	
 	x = y = z = 90
 	
-	//Variabili globali e locali
+	#Variabili globali e locali
 	
-	a = "cool" //Variabile globale
+	a = "cool" #Variabile globale
 	
 	def function():
-		a = "bad" //Variabile locale alla funzione 
+		a = "bad" #Variabile locale alla funzione 
 		
-	//Se aggiungo global la variabile globale a, definita inizialmente verra' modificata
+	#Se aggiungo global la variabile globale a, definita inizialmente verra' modificata
 	def function():
 		global a = "bad"
 \end{lstlisting}
@@ -78,21 +78,21 @@ Python è tipizzato, solo che, una volta inizializzata una variabile non abbiamo
 \newpage
 
 \begin{lstlisting}
-	x = "ciao" //stringa
-	x = 20 //int
-	x = 20.5 //float
-	x = 1j //numero complesso
-	x = ["ciao", "come", "stai"] //list
-	x = ("ciao", "come", "stai") //tuple
-	x = range(5) //range
-	x = {"nome" : "Va", "codice" : 17633} //dict
-	x = {"ciao", "amico"} //set
-	x = frozenset(x) //frozenset, ovvero un set non modificabile
-	x = True //bool
-	x = b"ABCD" //bytes
-	x = bytearray(5) //bytearray
-	x = memoryview(bytes(5)) //memoryview
-	//con type viene stampato il tipo della variabile
+	x = "ciao" #stringa
+	x = 20 #int
+	x = 20.5 #float
+	x = 1j #numero complesso
+	x = ["ciao", "come", "stai"] #list
+	x = ("ciao", "come", "stai") #tuple
+	x = range(5) #range
+	x = {"nome" : "Va", "codice" : 17633} #dict
+	x = {"ciao", "amico"} #set
+	x = frozenset(x) #frozenset, ovvero un set non modificabile
+	x = True #bool
+	x = b"ABCD" #bytes
+	x = bytearray(5) #bytearray
+	x = memoryview(bytes(5)) #memoryview
+	#con type viene stampato il tipo della variabile
 	type(x)
 \end{lstlisting}
 
@@ -109,17 +109,17 @@ Inoltre:
 Python in sè per sè è lento, perchè però ha questo successo? Perchè in un programma sono poche le componenti che devono essere efficienti e sono spesso algoritmi. Gli algoritmi verranno presi da NumPy o altre librerie, che hanno la loro implementazione in C o C++, garantendo massima efficienza.
 
 \begin{lstlisting}
-	//L'assegnamento crea un oggetto in memoria di tipo Float, a cui la variabile fa riferimento
+	#L'assegnamento crea un oggetto in memoria di tipo Float, a cui la variabile fa riferimento
 	answer = 3.4
 	print('Type:', type(answer))
 	print('Identity', id(answer))
 	print('Value', answer)
 	
-	//L'assegnamento copia il riferimento dell'oggetto nella nuova variabile
+	#L'assegnamento copia il riferimento dell'oggetto nella nuova variabile
 	spam = answer
-	print(spam.equals(answer)) //ritornera' True
-	
-	 //L'istruzione seguente NON modifica l'oggetto ma crea un nuovo oggetto contenente il risultato e ne assegna il riferimento alla variabile: si puo' osservare infatti che l'identita' dell'oggetto associato a 'answer' e' cambiata, mentre l'identita' di spam e' la stessa
+	print(spam.equals(answer)) #ritornera' True
+	 
+	 # L'istruzione seguente NON modifica l'oggetto ma crea un nuovo oggetto contenente il risultato e ne assegna il riferimento alla variabile: si puo' osservare infatti che l'identita' dell'oggetto associato a 'answer' e' cambiata, mentre l'identita' di spam e' la stessa
 	 answer *= 2
 	 print('Identita nuovo oggetto:', id(answer))
 	 print('Identita vecchio oggetto :', id(spam))
@@ -136,11 +136,11 @@ Il loro tipo non fa parte dei tipi di base visti prima, hanno un valore particol
 \end{itemize}
 
 \begin{lstlisting}
-	//Sintassi per oggetto Ellipsis
+	#Sintassi per oggetto Ellipsis
 	x = ...
 	y = Ellipsis
 	print(x, y)
-	//Confronto fra stringa e numero, restituisce notImplemented
+	#Confronto fra stringa e numero, restituisce notImplemented
 	ret = 'testo'._eq_(42)
 \end{lstlisting}
 
@@ -153,6 +153,413 @@ I numeri possono essere rappresentati attraverso int, float e Complex, possono e
 Tutti i caratteri messi dentro ad una stringa con triplici apici vengono considerati, non succede la stessa cosa con apici doppi o singoli.
 Non esiste il tipo carattere! E' possibile accedere alle stringhe come se fossero array(liste python).
 
-\begin{listlisting}
-	\item 
-\end{listlisting}
+\section{Booleani}
+\begin{lstlisting}
+	print(10 > 9)
+	print(10 == 9)
+	print(10 < 9)
+	a = 200
+	b = 33
+	if b > a:
+		print("b > a")
+	else:
+		print("b <= a")
+	#Valori convertiti a True
+	x = "VA"
+	y = 15
+	print(bool(x), bool(y), bool("abc"), bool(123))print(bool(["rosse", "verde", "blu"])) #Valori convertiti a False
+	print(bool(False), bool(None), bool(0), bool(""))print(bool(()), bool([]), bool({}))
+\end{lstlisting}
+
+\section{Operatori aritmetici, di assegnamento, di identità, di appartenenza e bit a bit}
+
+Osservazione sulla divisione : la divisione fra numeri interi avviene attraverso il // (risultato arrotondato all'intero inferiore). Invece usando / ritornerà un float.\\
+Per il resto si trova tutto sulle slide del prof oppure sulla documentazione ufficiale di python.
+
+\section{Condizioni if..elif..else}
+
+\begin{lstlisting}
+	a = 200
+	b = 1
+	if b > a:
+		print("b>a")
+	m = a
+		elif b == a:
+	print("a=b")
+	m = a
+		else:
+	print("b<a")
+	m = b
+	print(m)
+	# Espressione condizionale
+	print("b>a") if b>a else print("b<=a")
+	# Due espressioni condizionali a cascata
+	print("b>a") if b>a else print("b=a") if b==a else print("b<a")
+	# Altro esempio
+	print("b>a" if b>a else "b=a" if b==a else "b<a")
+\end{lstlisting}
+
+\section{Cicli}
+
+
+\begin{lstlisting}
+	i = 0
+	while True:
+		i += 1
+		if i == 4:
+			continue
+		print(i)
+		if i == 6:
+			break
+	
+	#E' possibile mettere un else fuori da un while, in modo che quando il while diventa falso (solo in questo caso) funziona come una sorta di if
+	
+	i = 0
+	while i < 6:
+		print(i)
+		i += 1
+	else:
+		print("Fine del ciclo")
+\end{lstlisting}
+
+\begin{lstlisting}
+	colori = ["rosso", "verde", "blu"]
+	
+	for x in colori:
+		print(x)
+	
+	for x in "Visione Artificiale":
+		print(x)
+	
+	for i in range(6):
+		print(i)
+\end{lstlisting}
+
+\section{Liste}
+
+
+\begin{lstlisting}
+	colori = ['Rosso', 'Verde', 'Blu'] #in alternativa uso il costruttore list()
+	print(colori)
+	print(type(colori), len(colori))
+	print(colori[0]) # Primo elemento
+	print(colori[-2]) # Penultimo elemento
+	
+	for c in colori:
+		print(c)
+	
+	colori[1] = 'Grigio' # Modifica di un elemento
+	
+	colori.append('Verde')
+	colori.remove('Grigio')
+	
+	 #fa l'append ma con una lista, di solito si utilizza l'operatore +=, che ci da ugualmente la possibilita' di concatenare liste
+	
+	colori.extend(['Arancione', 'Giallo', 'Viola','Azzurro'])
+	print(colori)
+
+	#metodologia con +=
+	
+	l1 = [1, 2]
+	
+	#mi permette di creare la lista [1, 2, 3, 4], l'id della lista rimane invariato, perche' la lista e' un oggetto modificabile, quindi non	occorre fare puntare la lista nuova ad un nuovo oggetto
+	
+	l1 += [3, 4] 
+	
+	# Esempi di "list comprehension", modo per generare delle liste con la sintassi fra quadre
+	
+	coloriA = [c for c in colori if c[0]=='A'] #for = tali che
+	quadrati = [x*x for x in range(1,10)] #lista di tutti i quadrati degli x che stanno nel range fra 1 e 9
+	print(coloriA, quadrati)
+\end{lstlisting}
+
+Accesso agli elementi :
+\begin{itemize}
+	\item indice fra parentesi quadre
+	\item Possibile usare indice negativo e intervallo di indici
+	\item iterazione con for..in
+\end{itemize}
+L'operazione * con le liste ripete la stessa lista n volte.
+
+\section{Tuple}
+
+Le tuple non sono modificabili, possono essere create anche attraverso il costruttore tuple().
+
+\begin{lstlisting}
+	colori = ('Rosso', 'Verde', 'Blu')
+	print(colori)
+	print(type(colori), len(colori))
+	print(colori[0]) # Primo elemento
+	print(colori[-2]) # Penultimo elemento
+	
+	for c in colori:
+		print(c)
+	t0 = (3) # N.B. questa non e' una tupla, e' un int
+	t0 = () #questa e' invece una tupla
+	print(type(t0))
+	
+	t1 = (3,) # Tupla con un solo elemento
+	t2 = (1,2)
+	t3 = (4,5,6)
+	t = t2 + t1 + t3 # Concatenazione di tuple
+	tm = t2 * 3 # Moltiplicazione di una tupla
+	print(t, tm)
+	
+	# Le parentesi si possono omettere
+	t1 = 3,
+	t2 = 1,2 # Oppure 1,2,
+	t3 = 4,5,6 # Oppure 4,5,6,
+	print(t1,t2,t3)
+\end{lstlisting}
+
+\newpage
+
+\section{Slicing}
+
+Informazioni:
+\begin{itemize}
+	\item $a[i:j]$ restituisce tutti gli elementi di a con indice k tale che $i \leq k < j$;
+	\item $a[:]$ seleziona tutto;
+	\item l'espressione estesa : $a[i:j:s]$ comprende lo step, ovvero dice quanti elementi saltare all'interno del range indicato. Posso avere anche uno step negativo, quindi restituisco una stringa ribaltata.
+\end{itemize}
+
+\begin{lstlisting}
+	a = "Python!"
+	print(a[4:6], a[0:2], a[:2]) # on Py Py
+	print(a[4:len(a)], a[4:100], a[4:]) # on! on! on!
+	print(a[:-3], a[-3:]) # Pyth on!
+	print(a[1:-1], a[:]) # ython Python!
+	print(a[::2]) # Pto!
+	print(a[1::2]) # yhn
+	print(a[::-1]) # !nohtyP
+	print(a[-3::2]) # o!
+	print(a[-1:-4:-2]) # !o
+	a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	print(a[-2::-2]) # [8, 6, 4, 2]
+	#Qui notiamo che e' possibile sfruttare anche l'assegnamento, al posto dei primi 3 elementi metto gli altri che ho selezionato
+	a[:3] = a[3:]
+	print(a) # [4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 9]
+	a[::2] = [0]*6 #qui sostituisco tutta la lista, a step 2, con 6 zeri
+	print(a) # [0, 5, 0, 7, 0, 9, 0, 5, 0, 7, 0, 9]
+	a[3:-3] = []
+	print(a) # [0, 5, 0, 7, 0, 9]
+	a[:] = a[::-1]
+	print(a) # [9, 0, 7, 0, 5, 0]
+\end{lstlisting}
+
+\newpage
+
+\section{Insiemi}
+
+Collezione non ordinata e non indicizzata, non può contenere duplicati ma possono essere aggiunti o rimossi elementi (non modificati).
+
+\begin{lstlisting}
+	colori = {'Rosso', 'Verde', 'Blu'}
+	print(colori)
+	print(type(colori), len(colori))
+	print('Rosso' in colori)
+	
+	for c in colori:
+		print(c)
+		
+	#Differenza fra remove e discard : remove da' errore se l'elemento non esiste, discard no, non da' nessun errore
+	colori.remove('Verde')
+	colori.discard('Giallo') # nessun errore
+	colori.add('Azzurro')
+	colori.update({'Arancione', 'Viola'})
+	print(colori)
+	
+	# Esempi di "set comprehension", stessa sintassi usata con le liste ma con le graffe
+	colori_a = {c for c in colori if c[0]=='A'}
+	quadrati = {x**2 for x in range(1,10)}
+	print(colori_a, quadrati)
+\end{lstlisting}
+
+\section{Dizionari}
+
+Non capita spesso in questo corso.
+
+\begin{lstlisting}
+	studenti = {101:"C.Rossi", 103:"M.Bianchi",111:"L.Verdi"}
+	print(studenti)
+	print(type(studenti), len(studenti))
+	if 103 in studenti:
+		print(studenti[103])
+	studenti[112] = "L.Neri"
+	studenti[115] = "A.Rosa"
+	for mat in studenti:
+		print(mat, studenti[mat])
+	for mat, nome in studenti.items(): #items() ritorna chiave-valore
+		print(mat, nome)
+	for nome in studenti.values(): #values ritorna solo i valori
+		print(nome)
+	rimosso = studenti.pop(103)
+	studenti[103] = rimosso
+	# Esempi di "dictionary comprehension"
+	studenti_105 = {m: studenti[m] for m in studenti if m<105}
+	somme = {(k, v): k+v for k in range(4) for v in range(4)}
+	print(studenti_105, somme)
+\end{lstlisting}
+
+\section{Funzioni}
+
+I parametri sono riferimenti ad oggetti. Per gli oggetti immutabili, l'effetto è sostanzialmente analogo al passaggio per valore. Per quelli mutabili una funzione può modificare il contenuto di un oggetto.
+
+\begin{lstlisting}
+	def stampa_messaggio(): # Definizione funzione
+		print("Addio, e grazie per tutto il pesce!")
+	stampa_messaggio() # Chiamata della funzione
+	
+	def calcola(x, y): # Funzione con parametri
+		"""Questa e' la docstring di calcola"""
+		return x * y
+	print(f"Il risultato e' {calcola(6, 7)}.")
+	
+	# Funzione che sostituisce elementi di una lista, enumerate restituisce un elenco di tuple con indice e valore
+	def sostituisci(lista, x, y):
+		for (indice, valore) in enumerate(lista):
+			if valore == x:
+				lista[indice] = y
+	
+	# Versione piu' "pythonic" della stessa funzione
+	def sostituisci2(lista, x, y):
+		lista[:] = [y if v==x else v for v in lista]
+	
+	l = [1, 2, 3, 1, 2, 3]
+	sostituisci(l, 2, 0)
+	sostituisci2(l, 3, -1)
+	print(l)
+\end{lstlisting}
+
+\section{Parametri delle funzioni}
+
+\begin{lstlisting}
+	def calcola(x, y, z = 1, k = 0):
+		return (x * y) / z + k
+	print(calcola(2,3), calcola(2,3,3), calcola(2,3,3,-2))
+	print(calcola(y=1,x=3), calcola(2,3,k=2),calcola(k=1,x=2,y=3,z=1))
+	
+	def prodotto(x, *altri_fattori):
+		p = x
+		for f in altri_fattori:
+			p *= f
+		return p
+	print(prodotto(2), prodotto(6,7), prodotto(2,2,2,2,2))
+	
+	#* = insieme di parametri senza nome (in questo caso gli argomenti dell'ipotetico corso
+	#** = dizionario di parametri con nome
+	def Esame(corso, *argomenti, **studenti):
+		print("Corso:", corso)
+		print("Argomenti:", end=' ')
+	for a in argomenti:
+		print(a, end=', ')
+		print("\nStudenti:")
+	for mat in studenti:
+		print(mat, studenti[mat])
+	Esame("Visione Artificiale", " Python", "NumPy", "OpenCV",M101="C.Rossi", M103="M.Bianchi", M111="L.Verdi")
+\end{lstlisting}
+
+\section{Unpacking}
+
+Lo useremo a volte nel passaggio dei parametri.
+
+\begin{lstlisting}
+	def calcola(a, b, c):
+		return a + b + c
+	
+	parametri = [4, 18, 20]
+	print(calcola(*parametri)) #spacchetta la lista, questo mi permette di passare tre valori separati come argomento della funzione
+
+	a = ["Python", "NumPy", "OpenCV"]
+	s = {"M101":"C.Rossi",
+		"M103":"M.Bianchi",
+		"M111":"L.Verdi"}
+	Esame("Visione Artificiale", *a, **s)
+
+	x, y, z = 2, 3, 4 # (x, y, z) = (2, 3, 4)
+
+	a1, a2, a3 = a
+	print(a1, a2, a3)
+	a1, *r = a #questo serve per spacchettare una lista della quale non ne conosco le dimensioni
+	print(a1, r)
+	primo, secondo, *altri, ultimo = range(10)
+	print(primo, secondo, ultimo, altri)
+	
+	x, y, _* = a #questo vuol dire che a deve contenere almeno 2 elementi, il primo va in x, il secondo va in y e il resto non mi interessa
+\end{lstlisting}
+
+\newpage
+
+\section{Funzioni come oggetti e lambda}
+
+
+\begin{lstlisting}
+	def prodotto(x, y):
+		"""Restituisce il prodotto di x e y."""
+		return x * y
+	
+	print(type(prodotto)) # <class 'function'>
+	print(prodotto.__name__) # prodottoprint(prodotto.__doc__) # la docstring
+	
+	def esegui(f, x, y):
+		"""Esegue la funzione f su x e y."""
+		return f(x, y)
+	
+	print(esegui(prodotto, 2, 3))
+	
+	f = lambda x, y: x ** y
+	print(type(f)) # <class 'function'>
+	print(f.__name__) # <lambda>
+	print(f.__doc__) # None
+	print(esegui(f, 4, 2))
+	print(esegui(lambda x, y: x // y, 9, 2))
+\end{lstlisting}
+
+\section{Funzioni predefinite}
+
+\begin{lstlisting}
+	s = "Python"
+	a = enumerate(s)
+	print(list(a))
+	# [(0,'P'), (1,'y'), (2,'t'),
+	(3,'h'), (4,'o'), (5,'n')]
+	
+	n = [ord(c) for c in s]
+	print(list(n), sum(n), min(n), max(n))# [80, 121, 116, 104, 111, 110] 642 80 121
+	
+	print(sorted(n))
+	# [80, 104, 110, 111, 116, 121]
+	
+	z = zip(s, n)
+	print(list(z))
+	# [('P',80), ('y',121), ('t',116),
+	('h',104), ('o',111), ('n',110)]
+\end{lstlisting}
+
+\newpage
+
+\section{Moduli python}
+
+\begin{lstlisting}
+	# Modulo fib.py
+	def fibonacci(n): # serie di Fibonacci fino a n
+		result = []
+		a, b = 0, 1
+		while a < n:
+			result.append(a)
+			a, b = b, a+b
+		return result
+	
+	# Esempi di importazione
+	import fib
+	print(fib.fibonacci(90))
+	
+	import fib as f
+	print(f.fibonacci(90))
+	
+	from fib import fibonacci
+	print(fibonacci(90))
+	
+	from fib import fibonacci as f
+	print(f(90))
+\end{lstlisting}
