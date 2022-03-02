@@ -1,0 +1,23 @@
+\chapter{lab01}
+I dati venivano scambiati attraverso XML, tutte le informazioni dentro a res sono in questo formato. Android studio generalmente li genera, dal momento che dà a disposizione la preview grafica.
+
+\section{Manifest}
+Il manifest gestisce i permessi di accesso (localizzazione, ecc.), è obbligatorio e deve assolutamente chiamarsi AndroidManifest.xml. 
+
+\section{Progetto}
+
+\subsection{Gradle}
+
+Android studio sfrutta Gradle per il building, è basato su apache ant e apache maven e ci permette di gestire le dipendenze.
+
+\subsection{Moduli}
+Gestione diversa dell'informazione in funzione del device utilizzato (smartphone o android tv o altre robe). Ogni modulo deve contenere: 
+\begin{itemize}
+	\item manifest
+	\item java
+	\item res
+\end{itemize}
+
+\subsection{Intent-filter}
+
+Va definito in base a ciò che voglio fare, devo specificare l'action della activity presa in considerazione. Una volta che l'app invoca l'intent android va a cercare tutte le app che lo hanno messo disponibile. Ogni activity deve avere un nome specifico ed un package specifico. Quando andiamo a definire le informazioni sono a livello di activity precise, altre a livello di application. 
