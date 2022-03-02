@@ -1,13 +1,94 @@
 \chapter{RSA}
 
-\begin{lstlisting}
-	//Hello.java
-	import javax.swing.JApplet;
-	import java.awt.Graphics;
-	
-	public class Hello extends JApplet {
-		public void paintComponent(Graphics g) {
-			g.drawString("Hello, world!", 65, 95);
-		}    
-	}
-\end{lstlisting}
+\section{Introduzione}
+
+Rivoluzione nel campo della crittografia, stiamo parlando di tecniche fortemente utilizzate al giorno d'oggi, ovvero di protocolli a chiave pubblica. Permette di condividere un segreto fra mittente e destinatario, nonostante non esista una chiave posso comunicare in completa segretezza. Questa rivoluzione è avvenuta negli anni 70.
+
+\section{Descrizione}
+
+Nei cifrari simmetrici visti sinora la chiave di cifratura è
+uguale a quella di decifrazione (o comunque ciascuna può
+essere facilmente calcolata dall’altra), ed è nota solo ai
+due partner che la scelgono di comune accordo e la
+mantengono segreta. Nei cifrari a chiave pubblica, o asimmetrici, le chiavi di cifratura e di decifrazione sono completamente diverse tra
+loro. Esse sono scelte dal destinatario che rende pubblica
+la chiave di cifratura k[pub], che è quindi nota a tutti, e
+mantiene segreta la chiave di decifrazione k[prv] che è
+quindi nota soltanto a chi la genera. Chiunque voglia spedirmi qualcosa deve conoscere la mia chiave pubblica. Esiste una coppia k[pub], k[prv] per ogni utente del
+sistema, scelta da questi nella sua veste di possibile
+destinatario Dest. La cifratura di un messaggio m da
+inviare a Dest è eseguita da qualunque mittente come
+c = C(m; k[pub]), ove sia la chiave k[pub] che la funzione
+di cifratura C sono note a tutti. La decifrazione è eseguita
+da Dest come m = D(c; k[prv]), ove D è la funzione di
+decifrazione anch’essa nota a tutti, ma k[prv] non è
+disponibile agli altri che non possono quindi ricostruire m. Il concetto base era già noto nel 76, non era invece chiara quale C e quale D avessero queste proprietà.
+
+\section{Asimmetria}
+
+L’appellativo di asimmetrici assegnato a questi cifrari
+sottolinea i ruoli completamente diversi svolti da Mitt e
+Dest, in contrapposizione ai ruoli intercambiabili che essi
+hanno nei cifrari simmetrici ove condividono la stessa
+informazione (cioè la chiave) segreta. 
+
+\newpage
+
+\section{Proprietà}
+
+\begin{itemize}
+	\item Per ogni possibile messaggio $m$ si ha:\\
+	$D(C(m, k[pub]), k[prv]) = m$ \\
+	Dunque stiamo dicendo che $D(C(m)) = m $, ossia Dest deve avere la possibilità di interpretare qualunque messaggio che gli altri utenti decidano di spedirgli. $C(D(m)) = m$ invece non vale sempre, chi soddisfa questa proprietà commutativa è molto apprezzato, perchè permette di implementare la firma digitale.;
+	\item La sicurezza e l’efficienza del sistema dipendono dalle
+	funzioni C e D, e dalla relazione che esiste tra le chiavi
+	k[prv] e k[pub] di ogni coppia;
+	\item La coppia k[prv] e k[pub] è facile da generare, e deve
+	risultare praticamente impossibile che due utenti scelgano
+	la stessa chiave deve essere inoltre praticamente impossibile (computazionalmente difficile) risalire alla chiave privata dalla pubblica.
+	\item Dati m e k[pub], è facile per il mittente calcolare il
+	crittogramma c = C(m, k[pub]). (deve essere facile la codifica).
+	\item Dati c e k[prv], è facile per il destinatario calcolare il
+	messaggio originale m = D(c, k[prv]) (deve essere facile la decodifica)
+	\item Pur conoscendo il crittogramma c, la chiave pubblica
+	k[pub], e le funzioni C e D, è difficile per un
+	crittoanalista risalire al messaggio m, ancora peggio alla chiave privata!. Risalire al messaggio smaschera una comunicazione (violazione puntuale), risalire alla chiave privata comporta invece una violazione totale del protocollo.
+\end{itemize}
+
+\section{Sicurezza}
+
+I protocolli a chiave privata vengono definiti sicuri in maniera empirica, ergo se non è stato violato in n anni di utilizzo è sicuro. Nei protocolli a chiave pubblica invece la sicurezza è determinata dal fatto che per violarli dovremmo riuscire a risolvere in tempo polinomiale dei problemi che fino ad esso non siamo riusciti a risolvere (non è stato possibile risolvere questo problema in anni,secoli e millenni, per questo è un certificato di garanzia di gran lunga migliore rispetto a quello dei protocolli a chiave privata).
+
+\section{Funzioni one-way}
+
+C deve essere una funzione one-way, cioè facile da calcolare e difficile da invertire, ma deve contenere un meccanismo segreto detto trap-door che ne consenta la facile invertibilità solo a chi conosca tale meccanismo (questo è il succo, la sintesi dei protocolli a chiave pubblica, lo svela-segreto è la chiave privata). La conoscenza di k[pub] non fornisce alcuna indicazione sul meccanismo segreto, che è svelato da k[prv] quando questa chiave è inserita nella funzione D (D = decodifica).
+
+\section{Richiami di algebra modulare}
+
+$\mathbb{Z}_n$ è l'insieme di numeri modulo $m$. $\mathbb{Z}^{*}_n$ è un sottoinsieme di $\mathbb{Z}_n$ e rappresenta l'insieme di elementi di $\mathbb{Z}_n$ relativamente primi con $n$, 0 ed 1 esclusi. La notazione $a$ mod $n$ significa fare a fette $a$ in chunk lunghi $n$. Se prendo due numeri e li divido per lo stesso $n$ e ottengo lo stesso resto sono nella stessa classe di equivalenza.
+
+\begin{itemize}
+	\item $\mathbb{Z}_n = \{0, 1, ..., n\}$;
+	\item $\mathbb{Z}^{*}_p = \{1, ..., p - 1\}$;
+	\item $a$ mod $n$ è il resto della divisione intera fra $a$ e $n$;
+	\item $a$ $\cong$ $b$ mod $n$ se e solo se $a$ mod $n$ = $b$ mod $n$;
+	\item $a$ $\cong$ $b$ mod $n$ se e solo se $a$ = $b + kn$; 
+	\item $a$ primo con $b$ se e solo se il loro massimo comun divisore è uguale a 1.
+\end{itemize}
+
+\section{Funzione di Eulero}
+
+Concetto importantissimo, non fa altro che dirci quanto è grande $\mathbb{Z}^{*}_n$, ovvero la sua cardinalità.Ovvero:\\\\
+$\phi(n) = |\mathbb{Z}^{*}_n|$
+\subsection{Proprietà}
+\begin{itemize}
+	\item $\phi(p) = p - 1$ 
+	\item $\phi(pq) = (p - 1) (q - 1)$
+	\item $a$ primo con $b$ allora $\phi(ab) = \phi(a) \phi(b)$
+	\item $\phi(n)$ difficile da calcolare (non riusciamo a calcolarla efficientemente, se sapessimo fattorizzare sarebbe facile anche calcolare $\phi$. Anche se fosse difficile fattorizzare noi potremmo tentare di trovare $\phi$ con metodi alternativi).
+\end{itemize}
+
+\section{Teorema di Eulero}
+
+Sia $n > 1$ e $a$ primo con $n$, allora:\\\\
+$a^{\phi(n)} \cong 1$ mod $n$ 

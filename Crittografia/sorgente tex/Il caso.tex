@@ -105,10 +105,10 @@ della rappresentazione di $x$ : un algoritmo che richiede un
 numero di operazioni proporzionale al valore di $x$ sarà
 dunque esponenziale. Il costo computazionale è riferito alla lunghezza del numero (input), se io ho 13215798 la lunghezza del numero è 8 (ovvero il numero di cifre), è l'n in base al quale calcoliamo il costo. La lunghezza dei numeri è correlata al numero stesso tramite un logaritmo (e non con il valore stesso del numero, consideriamo il numero di cifre). 
 
-\section{Generatori basati su funzioni one-way}
+\section{Generatori basati su funzioni one-way - Pratica}
 $f$ è la nostra funzione one-way e definiamo una sequenza applicandola ad un valore.\\
 $S = xf(x)f(f(x))f(f(f(x)))...$\\
-Se io uso questo sistema, quando conosco $f(x)$ posso ricavare $f(f(x))$, quindi i numeri sono facilmente prevedibili. Ma cosa succede se io all'esterno fornisco questi numeri in numero inverso? ovvero f(f(x)), piuttosto che f(x)? Che per ricavare f(f(x)) è necessario invertire la funziona, che abbiamo visto, nelle funzioni one-way, essere difficile. Formalmente:\\
+Se io uso questo sistema, quando conosco $f(x)$ posso ricavare $f(f(x))$, quindi i numeri sono facilmente prevedibili. Ma cosa succede se io all'esterno fornisco questi numeri in numero inverso? ovvero f(f(x)), piuttosto che f(x)? Che per ricavare f(f(x)) è necessario invertire la funzione, che abbiamo visto, nelle funzioni one-way, essere difficile. Formalmente:\\
 Se dunque si calcola la S per un certo numero di passi senza svelare il risultato, e si comunicano poi gli elementi uno dopo l’altro in ordine inverso, ciascun elemento non è prevedibile in tempo polinomiale pur conoscendo quelli comunicati prima di esso.
 
 \newpage
@@ -116,19 +116,19 @@ Se dunque si calcola la S per un certo numero di passi senza svelare il risultat
 \section{Test di prossimo bit}
 
 Test che ci dice se ciò che stiamo vedendo è abbastanza random per i nostri scopi crittografici. Dice che:\\
-Se io ho 10001101 e voglio scoprire cosa viene dopo l'ultimo 1 mi butto ad indovinare, avendo in ogni caso probabilità $\dfrac{1}{2}$ di indovinare (questo vale per un qualcuno che non ha informazioni legate alla generazione di bit). Se un qualcuno non ha $P("indovinare") \geq \dfrac{1}{2} + \delta$ ho vinto, ho passato il test, se l'algoritmo passa il test viene detto crittograficamente sicuri ed è dimostrabile che passano anche i 4 test standard definiti in precedenza. Essi
+Se io ho 10001101 e voglio scoprire cosa viene dopo l'ultimo 1 mi butto ad indovinare, avendo in ogni caso probabilità $\dfrac{1}{2}$ di indovinare (questo vale per un qualcuno che non ha informazioni legate alla generazione di bit). Se un qualcuno non ha $P("indovinare") \geq \dfrac{1}{2} + \delta$ ho vinto, ho passato il test, se l'algoritmo passa il test viene detto crittograficamente sicuro ed è dimostrabile che passano anche i 4 test standard definiti in precedenza. Essi
 vengono costruiti impiegando particolari predicati delle funzioni one-way, cioè proprietà che possono essere vere o false per ogni valore di x.
 
 \section{Predicati hard-core}
 Un predicato, in logica, è una funzione che si applica ad un qualcosa e restituisce vero o falso.\\
 Formalmente:\\
 Un predicato $b(x)$ è detto hard-core per una funzione one-way $f(x)$ se $b(x)$ è facile da calcolare conoscendo il valore di $x$ , ma è difficile da calcolare (o anche solo da prevedere con probabilità di successo maggiore di 1/2) conoscendo solo il valore di $f (x)$. In sostanza la proprietà hard-core, letteralmente "nucleo duro", concentra in un bit la difficoltà computazionale della $f$. 
-\paragraph{Abbiamo che} se $f$ è una funzione difficilmente invertibile è difficile, a partire da $x_1$ definire $x_0$ (la $f$ è one-way). In questo caso, il predicato hardcore mi dice : è difficile calcolare tutto $x_0$, o c'è solo un bit difficile da calcolare? $b$ deve essere una spremuta di $x_0$, di un solo bit, che comunque deve essere difficile da calcolare.
+\paragraph{Abbiamo che} se $f$ è una funzione difficilmente invertibile è difficile, a partire da $x_1$ definire $x_0$ (la $f$ è one-way). In questo caso, il predicato hardcore mi dice : è difficile calcolare tutto $x_0$, o c'è solo un bit difficile da calcolare? $b$ deve essere una spremuta di $x_0$, di un solo bit, che comunque deve essere difficile da calcolare. In conlusione, il predicato hardcore riassume su di sè la difficoltà dell'inversione di $f$.
 
 \subsection{Esempio}
 
 Un esempio di funzione one-way è la $f(x) = x^2$ mod $n$ se
-$n$ non è primo. Esempio: $n = 77$ e $x = 10$, è (polinomialmente) facile calcolare il valore $y = 102$ mod $77 = 23$ ma è (esponenzialmente) difficile risalire al valore di $x = 10$ dato $y = 23$. Ora il predicato: $b(x) = "x è dispari"$ è hard-core per la funzione suddetta. Infatti il valore di $x$ permette di calcolare immediatamente $b(x)$ = 1 se x è dispari, $b(x)$ = 0 se x è pari, ma il problema di calcolare $b(x)$ conoscendo solo il valore $y = x^2$ mod $n$ è esponenzialmente difficile.
+$n$ non è primo. Esempio: $n = 77$ e $x = 10$, è (polinomialmente) facile calcolare il valore $y = 102$ mod $77 = 23$ ma è (esponenzialmente) difficile risalire al valore di $x = 10$ dato $y = 23$. Ora il predicato: $b(x)$ = "x è dispari" è hard-core per la funzione suddetta. Infatti il valore di $x$ permette di calcolare immediatamente $b(x)$ = 1 se x è dispari, $b(x)$ = 0 se x è pari, ma il problema di calcolare $b(x)$ conoscendo solo il valore $y = x^2$ mod $n$ è esponenzialmente difficile.
 
 \begin{figure}[htp]
 	\includegraphics[width=200pt]{./img/funzioni-one-way.png}
@@ -141,7 +141,58 @@ $n$ non è primo. Esempio: $n = 77$ e $x = 10$, è (polinomialmente) facile calc
 \section{Generatore Blum, Blum, Shub}
 
 \begin{figure}[htp]
-	\includegraphics[width=0.8\linewidth]{./img/blumblumshub.png}
+	\includegraphics[width=300pt]{./img/blumblumshub.png}
 	\caption{Quello che in breve, dobbiamo sapere su questo generatore}
 	\label{img:blumblumshub}
 \end{figure}
+
+$\{x_0, x_1, ..., x_m - b_m\}$ il primo bit restituito è $x_m - b_m$. Si fa così perchè b è un predicato hardcore per questa funzione $f$.
+
+\subsection{Dimostrazione formale test di prossimo bit}
+
+Dobbiamo dimostrare che il generatore BBS supera il test di prossimo bit, ma questo è in effetti un caso particolare di un risultato generale. Poniamo che $f(x)$ sia una
+arbitraria funzione one-way e $b(x)$ sia un suo predicato hard-core. Indichiamo con $f^{i}(x)$ l’applicazione iterata della funzione per i volte consecutive ($f(f(f(f(x))))$, ecc.), e consideriamo la sequenza binaria che si ottiene partendo da un valore arbitrario di $x$ , calcolando $b(x)$ e $f(x)$, iterando il calcolo della $f$ un numero arbitrario di volte, e ordinando in senso inverso i valori del predicato così ottenuti.\\
+Sequenza : $b(f^{i}(x)), b(f^{i - 1}(x))...b(f^{2}(x)), b(f(x)), b(x)$\\
+Per quanto osservato in precedenza sulle funzioni one-way, e ricordando che il predicato scelto è hard-core, segue che ciascun elemento della sequenza supera il test di prossimo
+bit. $b(x)$ lo tiriamo fuori in fondo perchè se lo tirassimo fuori prima daremmo informazioni sui bit successivi. Nonostante alcuni accorgimenti di calcolo per incrementarne l’efficienza, il generatore BBS è piuttosto lento poiché il calcolo di ogni bit richiede l’esecuzione di un elevamento al quadrato di un numero di grandi
+dimensioni nell’algebra modulare.
+
+\newpage
+
+\section{Generatori basati su crittografia simmetrica}
+
+Premessa : questi cifrari sono molto efficienti, questo perchè è possibile calcolare la $C$ agilmente, sono inoltre inviolati. Supponiamo di avere un cifrario $C(m, k)$, con $m$ = messaggio e $k$ = chiave, che genera un crittogramma. Come possiamo sfruttare questo cifrario per generare pseudo-casualità? utilizzando la chiave segreta $k$ del cifrario e sostituendo il messaggio m con un opportuno valore relativo al generatore. Quindi, il messaggio viene riempito dal seme iniziale del generatore e poi dopo si applica iterativamente il cifrario per ottenere la sequenza di valori che richiediamo. In tal modo l’imprevedibilità dei risultati è garantita dalla struttura stessa dei cifrari. Un cifrario non fa altro che prendere un messaggio, prendere un po' di randomness, applicarla al messaggio e infine non fa altro che impastare queste due cose per generare il crittogramma. L'intruso fatica a risalire al messaggio perchè esso è stato impastato con della casualità. Troppa casualità $\rightarrow$ il messaggio scompare dentro il crittogramma. Un po' di casualità $\rightarrow$ l'informazione contenuta nel messaggio viene parzialmente eliminata. Applicando C tante volte a partire da un messaggio iniziale, questo è un buon metodo per generare bit pseudo casuali. Per questi esistono realizzazioni estremamente efficienti. Poiché i cifrari generano parole (i crittogrammi) composte da molti bit, ogni parola prodotta potrà essere interpretata come numero pseudo-casuale o come sequenza di bit pseudo-casuali.
+
+\subsection{Esempio di generatore con crittografia simmetrica}
+
+Vediamo un generatore di questo tipo, approvato come Federal Information Processing Standard (FIPS) negli Stati Uniti: il cifrario impiegato al suo interno è in genere
+una versione del DES di amplissima diffusione. Il DES è un macchinario che codifica informazione a blocchi di 64 bit (chunk). Detto r il numero di bit delle parole prodotte (nel DES si ha r = 64), s un seme casuale di r bit, m il numero di parole
+che si desidera produrre , e ricordando che k è la chiave del cifrario (stiamo usando DES per produrre dati random, non codificare), abbiamo:
+
+\begin{lstlisting}
+	def generatore(s, m):
+		def xor(x, y):
+			return x ^ y	#in python lo xor si fa cosi'
+		x_list = []
+		d = r # r bit presi da data e ora attuale
+		y = C(d, k)
+		z = s
+		for i in range(1, m + 1):
+			x_i = C(xor(y, z), k)
+			z = C(xor(y, x_i), k)
+			x_list.append(z)
+		return x_list
+			
+\end{lstlisting}
+
+\begin{itemize}
+	\item In prima istanza il generatore prende un numero $r$ di bit pseudo-random, attraverso delle chiamate a sistema, salvandolo poi in una variabile d;
+	\item dopodichè verrà calcolato il cifrario, prendendo in input d e k, quindi invece di codificare un messaggio, codifichiamo questo insieme di bit generati al passo precedente, lo poniamo uguale a y;
+	\item poniamo $z$ = $s$, ricordando che s è il seme;
+	\item iteriamo m volte, calcolando altrettante volte il crittogramma, una volta finito il calcolo, il risultato viene aggiunto all'insieme delle soluzioni, che verrà, alla fine, comunicato all'esterno.
+\end{itemize}
+
+\subsection{Conclusione}
+
+Cosa stiamo facendo? Stiamo cercando di sopperire alla scarsità di bit random, se noi avessimo tanti bit random, le cose sarebbero molto facili, ad esempio potremmo usare il one-time-pad... ma siccome il one-time-pad consuma la chiave, non è possibile sfruttarlo. Allora sfruttiamo dei cifrari che prendono dentro una chiave piccola, o dei generatori pseudo-casuali che però per forza di cose prendono dentro un seme di casualità molto piccolo (perchè se noi avessimo una risorsa di randomness arbitrariamente lunga, non avremmo bisogno dei generatori pseudo-casuali). Per questo motivo, se avessimo tanta randomness non sarebbe necessario studiare i generatori simmetrici, basterebbe one-time-pad.  tutte le problematiche citate in questa lezione sono generate dal fatto che non abbiamo randomness in natura. 
+\paragraph{In conclusione} noi cerchiamo dunque, tramite piccoli semi di randomness, di amplificare il seme della randomness nei generatori per ottenere sequenze di valori pseudo-casuali (è come se noi, in modo omeopatico, avessimo un piccolo seme random che dovesse generare tantissimi valori, (s = "seme piccolo", t = "tanti valori") $\rightarrow$ pseudo-random)
