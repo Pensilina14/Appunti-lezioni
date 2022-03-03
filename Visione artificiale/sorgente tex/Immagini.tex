@@ -269,3 +269,395 @@ La funzione cv.cvtColor(originale, CONV) effettua la conversione del formato del
 	\includegraphics[width=\linewidth]{./immagini/opencv_images_c7.png}
 	\label{img:opencv_images_c7}
 \end{figure}
+
+\newpage
+
+\section{Istogramma di una immagine grayscale}
+
+Un istogramma è un grafico che ci dice quanti pixel dentro all'immagine ci sono per ciascuno dei possibili livelli di grigio. Nell'esempio abbiamo a sinistra una immagine con 1 byte per ogni pixel, quindi ogni immagine può avere valori da 0 a 255. Il nostro istogramma avrà 255 possibili colonne, da 0 a 255 e l'altezza di ogni colonna di questo istogramma sarà uguale a quanti pixel di quel livello di grigio ci sono in tutto nell'immagine. L'istogramma nelle immagini è importante, perchè permette di estrarre informazioni interessanti, quali:
+\begin{itemize}
+	\item se la maggior parte dei valori sono solo condensati in una zona, l'immagine ha uno scarso contrasto;
+	\item se nell'istogramma sono predominanti le basse intensità, l'immagine è molto scura.
+\end{itemize}
+
+
+
+\begin{figure}[htp]
+	\includegraphics[width=\linewidth]{./immagini/istogramma_spiaggia.png}
+	\label{img:istogramma_spiaggia}
+\end{figure}
+
+
+\section{Calcolo istogramma}
+
+\begin{lstlisting}
+	
+	#da non fare in un progetto reale, perche' e' lentissimo, il python non e' adatto ad eseguire dei cicli
+	def calc_hist_py(img):
+		h = np.zeros(256, dtype=int)
+		#np.nditer e' un iteratore
+		for p in np.nditer(img):
+			h[p] += 1	#questo mi alza la colonnina dell'indice p
+		return h
+	
+	#np.histogram(immagine, numero di elementi dell'istogramma, range dei valori) e' generale, non specifico per le immagini. Questo metodo restituisce una tupla con 2 valori, il primo valore e' l'array dell'istogramma, il secondo valore della tupla e' l'elenco dei range. Per questo e' stato considerato solo l'elemento di indice 0.
+	def calc_hist_np(img):
+		return np.histogram(img,256,[0,256])[0]
+	
+	#cv.calcHist() e' specifico per le immagini, calcola tanti istogrammi in un colpo solo. Noi gli passiamo (lista python, canale(lista), ).  Restituisce un array bidimensionale, il prof usa squeeze() che elimina le dimensioni ad 1 (dal momento che sto passando una singola immagine).
+	def calc_hist_cv(img):
+		return cv.calcHist([img], [0], None, [256], [0, 256]).squeeze()
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=\linewidth]{./immagini/istogrammi.png}
+	\label{img:istogrammi}
+\end{figure}
+
+\newpage
+
+\section{Analisi dell'istogramma}
+
+A livello di contenuto dell'immagine, quando non è troppo complessa, è possibile ricavare anche legate agli oggetti. Ad esempio si può notare la separazione fra una torre ed il cielo, questo tipo di istogramma è di tipo bimodale. 
+
+\section{Operazioni sui pixel}
+
+\subsubsection{Su una singola immagine}
+\paragraph{Formula} $I'[y, x] = f(I[y, x])$\\
+Consistono nell'applicazione di una funzione al valore di ciascun pixel. Ciò mi produrrà una immagine delle stesse dimensioni e il valore di ciascun pixel della nuova immagine dipenderà \textbf{unicamente} dal valore del corrispondente pixel nell'immagine di partenza. Esempi:
+\begin{itemize}
+	\item Variazione della luminosità; 
+	\item variazione del contrasto;
+	\item conversione da livelli di grigio a (pseudo) colori;
+	\item binarizzazione con soglia globale.
+\end{itemize}
+
+
+\subsubsection{Su più immagini}
+\paragraph{Formula} $I'[y, x] = f(I_1[y, x], I_2[y, x], ...)$ \\
+In questa applicazione vengono prese più immagini (tutte con le stesse identiche dimensioni), la nostra funzione prende il valore di un pixel e lo distribuisce fra più immagini, ritornando poi una singola immagine.
+
+
+\section{Variazione luminosità e contrasto}
+
+\subsubsection{Formula classica}
+
+$f(v) = \alpha \cdot v + \beta$ \\\\
+$v$ è un valore di luminosità per un'immagine, per capirci è quello che nella sezione precedente abbiamo chiamato $I[y, x]$. $\alpha$ controlla il contrasto, $\beta$ controlla la luminosità e vogliamo che il valore di output sia un byte (per garantirlo si va a tagliare, andandolo a forzare nell'intervallo [0, 255]). Ponendo $\alpha = 1$ e $\beta = 0$ viene la funzione identità.
+
+\newpage
+
+\section{Gamma correction - funzione non lineare}
+
+Modo non lineare per aumentare la luminosità dei toni scuri o la luminosità dei toni chiari.
+\subsection{Formula}
+
+$f(v) = (\tfrac{v}{255})^{\gamma} \cdot 255$ \\\\
+\begin{itemize}
+	\item se $\gamma < 1$ aumenta la luminosità dei toni scuri;
+	\item se $\gamma > 1$ diminuisce la luminosità dei toni chiari; 
+	\item se $\gamma = 1$ otteniamo la funzione identità.
+\end{itemize}
+In prima istanza normalizziamo il numero di pixel fra 0 ed 1 (attraverso la frazione, 0 corrisponde al nero, 1 corrisponde al bianco). Anche elevando alla $\gamma$ il valore resterà comunque compreso fra 0 e 1, moltiplicando per 255 infine otterrò un valore compreso nell'intervallo [0, 255].
+
+\section{Lookup table (LUT)}
+
+Concetto molto importante quando si lavora con funzioni che si applicano sul singolo pixel. In generale la lookup table rappresenta un concetto molto utilizzato in informatica, è una tabella in cui vado a cercare qualcosa che mi interessa. Idea di base: faccio il calcolo una volta e lo salvo nella table, in modo da evitare inutili sprechi computazionali. In questo caso ho in memoria un array di 256 byte, determinando applicando la funzione $f(v)$ su 256 valori distinti.
+
+\begin{figure}[htp]
+	\includegraphics[width=\linewidth]{./immagini/LUT.png}
+	\label{img:LUT}
+\end{figure}
+
+\newpage
+
+\section{LUT in python/numpy/OpenCV}
+
+\begin{lstlisting}
+	# Un esempio di funzione f (Gamma correction per un certo valore di )
+	y = 0.5	
+	# Calcolo di un singolo valore di f
+	f = lambda p: 255 * (p/255.0)**y
+	# Calcolo di f su tutti i valori di un array NumPy, impongo .astype(np.uint8) perche' altrimenti numpy restituisce un risultato in virgola
+	f_np = lambda a: f(a).astype(np.uint8)
+	# Calcolo dell'array LUT
+	lut = f_np(np.arange(256))
+	# Una semplice implementazione Python senza lookup table
+	def applica_py_f(img):
+		res = np.empty_like(img)	#creo una immagine vuota
+		h, w = res.shape			
+		#applico la funzione f al singolo valore del pixel, ripetuto per tutti i pixel
+		for y in range(h):			#vado da 0 fino ad h - 1 
+			for x in range(w):		#vado da 0 fino a w - 1
+				res[y,x] = f(img[y,x])
+		return res
+\end{lstlisting}
+
+\begin{lstlisting}
+	# Semplice implementazione Python con LUT
+	def applica_py_lut(img):
+		res = np.empty_like(img)
+		h, w = res.shape
+		for y in range(h):
+			for x in range(w):
+				res[y,x] = lut[img[y,x]]
+		return res
+	# Implementazione NumPy senza LUT, applica la funzione f su tutto l'array, prima l'ho usato per calcolare la LUT ma nulla mi vieta di applicare questa funzione su un array bidimensionale (in questo caso la mia immagine).
+	def applica_np_f(img):
+		return f_np(img)
+	# Implementazione NumPy con LUT, sto sfruttando l'indicizzazione con img, un array bidimensionale di interi
+	def applica_np_lut(img):
+		return lut[img]
+	# Funzione LUT di OpenCV
+	def applica_cv_lut(img):
+		return cv.LUT(img, lut)
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=150pt]{./immagini/output_lut.png}
+	\label{img:output_lut}
+\end{figure}
+
+\section{LUT da grayscale ad RGB}
+
+Viene preso in input un array lungo 255 e in uscita ritorna un colore. La percezione umana non è adatta ad osservare piccole variazioni fra toni di grigio. I nostri occhi sono più sensibili a variazioni fra colori, inoltre in molte applicazioni si ricolorano immagini grayscale per renderle meglio fruibili. OpenCV mette a disposizione una funzione apposita (appluColorMap) e anche una serie di mappe di colori già pronte all'uso. La colorMap rimappa i colori, ricreando una scala che va da 0 a 255.
+
+\begin{figure}[htp]
+	\includegraphics[width=\linewidth]{./immagini/LUT_colored.png}
+	\label{img:LUT_colored}
+\end{figure}
+
+\section{Operazioni aritmetiche fra immagini}
+
+\subsection{Differenza}
+
+Una operazione comune è la sottrazione dello sfondo ed è molto utile in visione artificiale, permette di catturare ed analizzare porzioni di immagini. Nota: np.nonzero è una funzione che mi ritorna gli indici degli elementi che sono diversi da 0.
+
+\begin{lstlisting}
+	#Ho immagine e sfondo, separate. 
+	img, back = cv.imread('esempi/mario-game.png'), \ cv.imread('esempi/mario-back.png')
+	#Qui fa la differenza bit a bit
+	diff = img - back # N.B. diff = cv.subtract(img, back) e' piu' efficiente
+	#scelgo tutto cio' che non e' zero, di conseguenza rimane mario
+	mask = diff!=0 
+	#creo una immagine tutta a zero e dopodiche' applico la maschera
+	res = np.zeros_like(img) 
+	res[mask] = img[mask]
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=300pt]{./immagini/mario_differenza.png}
+	\label{img:mario_differenza}
+\end{figure}
+
+\newpage
+
+\subsection{Operazioni bitwise}
+
+\begin{lstlisting}
+	sprite = cv.imread('esempi/sprite.png')
+	mask = cv.imread('esempi/mask.png')
+	back = cv.imread('esempi/hill.jpg')
+	res = back.copy()
+	x, y = 200, 100
+	h, w = sprite.shape[:2]
+	#roi = region of interest, pezzettino dello sfondo
+	roi = res[y:y+h,x:x+w]
+	#questo e' l'AND bit a bit , se faccio l'and con bit a 1 non succede niente, rimane il valore che c'era prima mentre se faccio l'AND con valori a 0 si cancella tutto. Quindi facendo l'and con la maschera nello sfondo, sto andando a lasciare dove c'e' il bianco (riferito alla sprite) lo sfondo, altrimenti c'e' il nero
+	roi &= mask	
+	#Facendo l'or bit a bit i valori a 0 rimangono tali, gli altri vengono cambiati
+	roi |= sprite
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=\linewidth]{./immagini/mario_bit.png}
+	\label{img:mario_bit}
+\end{figure}
+
+\subsection{Alpha blending o aliasing}
+
+Per ottenere un risultato migliore rispetto alle operazioni bitwise ci serve un ulteriore canale, chiamato $\alpha$. Si tratta di un canale che contiene un valore di trasparenza (di solito è un valore floating point fra 0 e 1) e la formula che vado ad applicare corrisponde ad una operazione fra tre immagini, la prima immagine è lo sfondo, la seconda immagine è la sprite e la terza immagine è il canale di trasparenza (è come una maschera, però invece che avere solo il valore 255 e 0, questa può assumere tutti i possibili colori). Come funziona? non si lavora più coi bit, si sfrutta una formula matematica che utilizza i numeri floating point. 
+
+\begin{lstlisting}
+	img1 = cv.imread('esempi/hill.jpg')
+	img2 = cv.imread('esempi/study.png')
+	img2_alpha = cv.imread('esempi/study-alpha.png')
+	h, w = img2.shape[:2]
+	a = img2_alpha / 255 # Trasforma il canale alpha da [0,255] a [0,1]
+	
+	x, y = 200, 100
+	res = img1.copy()
+	res[y:y+h,x:x+w] = img1[y:y+h,x:x+w]*(1.0-a) + img2*a
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=300pt]{./immagini/alpha_blending.png}
+	\label{img:alpha_blending}
+\end{figure}
+
+\newpage
+
+\section{Binarizzare un'immagine grayscale in opencv}
+
+La binarizzazione consiste nel trasformare una immagine da grayscale ad una con gamma di due colori (generalmente bianco e nero).
+
+\subsection{Soglia globale}
+Il metodo più semplice per binarizzare consiste nell'utilizzo di una soglia globale. Una soglia globale è definita dalla seguente funzione:\\
+$f(v, t)$ = 
+$
+\begin{cases}
+	0 \quad \quad v < t\\
+	255 \quad v \geq t
+\end{cases}
+$	
+\\\\
+Il problema dunque è concentrato nella identificazione della soglia... generalmente viene scelta osservando l'istogramma e tracciando una linea di demarcazione fra i due picchi di colore. La soglia si può individuare anche manualmente o attraverso dei metodi, come ad esempio il metodo di Otsu.
+\subsubsection{Il metodo di Otsu}
+
+Semplice algoritmo che cerca di trovare quella soglia che va a minimizzare la varianza intra-classe dell'intensità dei pixel delle due classi (una volta effettuata la binarizzazione distinguiamo pixel di background e foreground) determinate dalla soglia stessa. 
+
+\subsection{Soglia locale}
+Non sempre una soglia globale può fare al caso nostro, ci sono immagini dove la luce varia in un modo per cui lo sfondo è molto più scuro che in altre. Per risolvere questo problema scelgo più soglie, ad esempio potrei dividere l'immagini in più parti e ad ognuna applicare una diversa soglia. Il metodo più
+generale per la soglia locale è quello di avere una soglia diverso per ciascun pixel. 
+\subsubsection{Succo del discorso}
+La soglia locale è determinata per ogni pixel considerando una piccola regione dell'immagine attorno ad esso. Il metodo più semplice per definirla consiste nel determinare la soglia come media dei pixel nella regione meno un valore costante (openCV ha anche un metodo che sfrutta l'intorno Gaussiano invece che la media).
+
+\newpage
+
+\subsection{Binarizzazione su OpenCV}
+OpenCV ci mette a disposizione la funzione treshold, che ci permette di binarizzare una immagine. I parametri che prende sono: l'immagine, il valore della soglia, il valore massimo ed una costante (corrisponde alla soglia globale, posso passare anche OTSU, che ignorerà i parametri). La funzione restituisce una tupla, formata da : valore di ritorno e immagine, il valore di ritorno è la soglia (può tornare utile quando uso OTSU). Per quanto riguarda la binarizzazione con soglia locale OpenCV mette a disposizione la funzione adaptiveThresold, a cui passo (immagine; soglia; costante = tipo di soglia locale; costante = come utilizzo la soglia locale; dimensione della regione di pixel; costante = ciò che sottraggo alla media per ottenere la soglia).
+
+
+\subsubsection{Chiodi}
+
+\begin{lstlisting}
+	# Soglia globale (128)
+	img = cv.imread('esempi/bolts.png', cv.IMREAD_GRAYSCALE)
+	_, res = cv.threshold(img, 128, 255, cv.THRESH_BINARY)
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=300pt]{./immagini/chiodi_binarizzati.png}
+	\label{img:chiodi_binarizzati}
+\end{figure}
+
+\subsubsection{Torre}
+
+\begin{lstlisting}
+	# Soglia globale determinata dall'algoritmo di Otsu
+	img = cv.imread('immagini/torre.jpg', cv.IMREAD_GRAYSCALE)
+	t, res = cv.threshold(img, -1, 255, cv.THRESH_OTSU)
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=200pt]{./immagini/torre_binarizzata.png}
+	\label{img:torre_binarizzata}
+\end{figure}
+
+\subsubsection{Sudoku}
+
+\begin{lstlisting}
+	# Soglia locale (media su intorno 11x11 meno il valore 10)
+	img = cv.imread('immagini/sudoku.jpg', cv.IMREAD_GRAYSCALE)
+	res = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_MEAN_C,
+	cv.THRESH_BINARY, 11, 10)
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=200pt]{./immagini/sudoku_binarizzato.png}
+	\label{img:sudoku_binarizzato}
+\end{figure}
+
+\subsubsection{Ferrari}
+
+Fino ad ora abbiamo binarizzato delle immagini grayscale, quando abbiamo immagini a colori? posso eventualmente binarizzare i singoli canali, sempre che l'operazione abbia senso. In hls potrebbe essere interessante binarizzare la saturazione, come nell'esempio sottostante.
+
+\begin{lstlisting}
+	# Cosa succede binarizzando il canale saturazione di un'immagine HSL?
+	img = cv.imread('esempi/ferrari.jpg')
+	hls = cv.cvtColor(img, cv.COLOR_BGR2HLS)
+	#qui ho sovrascritto la saturazione con la binarizzazione della stessa
+	_,hls[...,2] = cv.threshold(hls[...,2], 150, 255, cv.THRESH_BINARY)
+	#ho riconvertito da hls a bgr
+	res = cv.cvtColor(hls, cv.COLOR_HLS2BGR)
+\end{lstlisting}
+
+\begin{figure}[htp]
+	\includegraphics[width=200pt]{./immagini/ferrari_binarizzata.png}
+	\label{img:ferrari_binarizzata}
+\end{figure}
+
+\section{Contrast stretching}
+
+L'idea del constrast stretching è di migliorare una immagine poco contrastata, ampliando il contrasto, lo si fa espandendo i livelli di grigio. 
+\subsubsection{Funzione}
+$f(I[y, x]) = 255 \cdot \dfrac{I[y, x] - \alpha}{\beta - \alpha}$\\
+ con $\alpha$ = "minimo livello di grigio dell'immagine" e $\beta$ = "massimo livello di grigio dell'immagine. Togliendo il minimo e dividendo per il range cosa verrà fuori, sapendo che $\alpha$ è il minimo di tutti i pixel? Abbiamo che il numeratore della frazione, diviso per il range massimo mi darà sempre un numero compreso fra 0 e 1. Così facendo ho riscalato tutti i miei valori, andando ad allargarli.
+ \subsubsection{Problema}
+ E' una bella idea, peccato che normalmente non funzioni assolutamente, ma perchè? se c'è anche un solo pixel a zero ed uno solo a 255, la funzione diventa identità, non fa niente dunque. Come risolvo? Considero i bit molto scuri e molto chiari degli outlier, dunque non interessanti. Quindi questo mi permette di ridefinire $\alpha$ e $\beta$, che non necessariamente conterranno il valore minimo o massimo. Posso scegliere ad esempio di scartare il 5 per cento dei pixel più chiari ed il 5 per cento dei pixel più scuri. 
+
+\section{Contrast stretching in Python/OpenCV}
+
+La formula è normalmente implementabile in numpy, l'unico accorgimento è fare in modo che tutti i valori siano float, per fare in modo di calcolare in floating point. Con np.clip, effettuo un troncamento e forzo il risultato chiudendo il range da 0 a 255. Per la trovata del percentile sfrutto la funzione np.percentile per  definire $\alpha$ e $\beta$.
+
+\begin{lstlisting}
+	def contrast_stretching(img, a, b):
+		
+		# Converte in floating point
+		n = 255*(img.astype(float)-a)/(b-a)
+		
+		# Forza il range [0,255] e converte in byte
+		return np.clip(n, 0, 255).astype(np.uint8)
+	
+	img = cv.imread('immagini/rice.png', cv.IMREAD_GRAYSCALE)
+	
+	# Contrast stretching con alfa=min(I) e beta=max(I)
+	res = contrast_stretching(img, img.min(), img.max())
+	img = cv.imread('esempi/kernel.png', cv.IMREAD_GRAYSCALE)
+	
+	# Contrast stretching con alfa=P_5(I) e beta=P_95(I)
+	res = contrast_stretching(img, np.percentile(img, 5), np.percentile(img, 95))
+\end{lstlisting}
+
+\section{Equalizzazione dell'istogramma}
+
+Altro modo per migliorare il contrasto, il vantaggio rispetto al constrast stretching è che non ha parametri, quindi gli passo l'immagine e fa quello che deve fare (non è detto che sia meglio rispetto allo stretching, dipende dal constesto). Si sfrutta spesso per migliorare il contrasto o rendere confrontabili immagini catturate in condizioni diverse di illuminazione.
+
+\subsection{Funzionamento}
+
+L'equalizzatore vuole distribuire tutti i livelli di grigio dell'istogramma in maniera uniforme. Zone dell'istogramma che sono scarsamente popolate, ovvero con pochi pixel, vengono compresse mentre le zone con molti pixel vengono allargate. Vogliamo dare più sfumature di grigio, aumentando il contrasto dove c'è più concentrazione di pixel e diminuendolo nelle zone meno popolate.
+
+\subsection{Formula}
+
+$f(v) = \sum_{i = 0}^{v}H[i]$\\\\Con H istogramma dell'immagine normalizzato:
+$H[i] = \dfrac{255 \cdot h[i]}{\sum h[i]} \rightarrow \sum_{i = 0}^{255}H[i] = 255$
+
+
+\section{Equalizzazione a colori}
+
+Posso effettuare l'equalizzazione anche sull'immagine a colori. Attenzione perchè non ha senso equalizzare separatamente i canali RGB, certi colori cambiano, non è più la stessa immagine.
+\paragraph{Ha senso} convertire in HSL e equalizzare solo sul canale della luminosità.
+
+\section{Equalizzazione in OpenCV}
+
+
+
+\begin{lstlisting}
+	#Equalizzazione di un'immagine grayscale
+	img = cv.imread('esempi/kernel.png', cv.IMREAD_GRAYSCALE)
+	res = cv.equalizeHist(img) #lavora su immagini grayscale
+	
+	# Equalizzazione di un'immagine a colori
+	# Esempio di come NON fare: equalizzazione di ciascun canale RGB
+	bgr = cv.imread('immagini/tbbt.jpg')
+	b, g, r = cv.split(bgr)
+	b_eq, g_eq, r_eq = [cv.equalizeHist(x) for x in (b, g, r)]
+	res_wrong = cv.merge((b_eq, g_eq, r_eq))
+	
+	# Esempio di come procedere convertendo in HSL ed equalizzando L
+	hls = cv.cvtColor(bgr, cv.COLOR_BGR2HLS)
+	h, l, s = cv.split(hls)
+	l_eq = cv.equalizeHist(l)
+	hls_eq = cv.merge((h, l_eq, s))
+	res_ok = cv.cvtColor(hls_eq, cv.COLOR_HLS2BGR)
+\end{lstlisting}
